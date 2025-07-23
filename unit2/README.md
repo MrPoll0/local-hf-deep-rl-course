@@ -1,5 +1,9 @@
 # Running Unit 2 Locally
 
+> **Build Time Notice:**
+> 
+> Building the provided `unit2.Dockerfile` may take a while, as it installs and resolves all dependencies from the pinned `environment.yml` for maximum reproducibility. For a **faster build**, you can use the `unit2_scratch.Dockerfile`, but be aware this is **risky**: it installs the latest versions of external packages, which may break due to upstream changes. The `environment.yml` approach is recommended for stability.
+
 > **CUDA Version Notice:**
 > 
 > This environment uses **CUDA 12.1** (see the `FROM nvidia/cuda:12.1.1-devel-ubuntu22.04` line in the Dockerfile). Please ensure your GPU and drivers are compatible with CUDA 12.1. If you need a different CUDA version, edit the `FROM` line in `base.Dockerfile` and adjust package versions as needed. See the [NVIDIA CUDA compatibility page](https://docs.nvidia.com/deploy/cuda-compatibility/) for more info.

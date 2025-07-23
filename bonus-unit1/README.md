@@ -1,40 +1,38 @@
-# Running Unit 1 Locally
+# Running Bonus Unit 1 Locally
 
 > **Build Time Notice:**
 > 
-> Building the provided `unit1.Dockerfile` may take a while, as it installs and resolves all dependencies from the pinned `environment.yml` for maximum reproducibility. For a **faster build**, you can use the `unit1_scratch.Dockerfile`, but be aware this is **risky**: it installs the latest versions of external packages, which may break due to upstream changes. The `environment.yml` approach is recommended for stability.
+> Building the provided `bonus-unit1.Dockerfile` may take a while, as it installs and resolves all dependencies from the pinned `environment.yml` for maximum reproducibility. For a **faster build**, you can use the `bonus-unit1_scratch.Dockerfile`, but be aware this is **risky**: it installs the latest versions of external packages, which may break due to upstream changes. The `environment.yml` approach is recommended for stability.
 
 > **CUDA Version Notice:**
 > 
 > This environment uses **CUDA 12.1** (see the `FROM nvidia/cuda:12.1.1-devel-ubuntu22.04` line in the Dockerfile). Please ensure your GPU and drivers are compatible with CUDA 12.1. If you need a different CUDA version, edit the `FROM` line in `base.Dockerfile` and adjust package versions as needed. See the [NVIDIA CUDA compatibility page](https://docs.nvidia.com/deploy/cuda-compatibility/) for more info.
 
-> **Important:** The section on loading a saved model from the Hugging Face Hub is **not supported** in this local environment due to conflicting dependencies. Please skip this part if following the notebook locally.
-
 ---
 
 ## Getting Started
 
-1. **Move to the Unit 1 directory:**
+1. **Move to the Bonus Unit 1 directory:**
    ```bash
-   cd unit1
+   cd bonus-unit1
    ```
 2. **Build the base image** (if not already built):
    ```bash
    docker build -t base-env -f ../base.Dockerfile .
    ```
-3. **Build the Unit 1 image**:
+3. **Build the Bonus Unit 1 image**:
    ```bash
-   docker build -t unit1-env -f unit1.Dockerfile .
+   docker build -t bonus-unit1-env -f bonus-unit1.Dockerfile .
    ```
-4. **Run the Unit 1 environment**:
+4. **Run the Bonus Unit 1 environment**:
 
    **For Linux/macOS:**
    ```bash
-   docker run --gpus all -p 8888:8888 -v "$(pwd)":/app unit1-env
+   docker run --gpus all -p 8888:8888 -v "$(pwd)":/app bonus-unit1-env
    ```
    **For Windows (PowerShell):**
    ```bash
-   docker run --gpus all -p 8888:8888 -v ${PWD}:/app unit1-env
+   docker run --gpus all -p 8888:8888 -v ${PWD}:/app bonus-unit1-env
    ```
 
 Once the container is running, open your browser and go to:
@@ -60,7 +58,7 @@ To free up disk space or remove old containers/images:
     ```
 - **Remove images (optional):**
     ```bash
-    docker rmi unit1-env base-env
+    docker rmi bonus-unit1-env base-env
     ```
 - **Remove dangling/unused images (optional):**
     ```bash
