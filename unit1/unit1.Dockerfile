@@ -1,19 +1,10 @@
 FROM base-env
 
-# Create the environment for Unit 1
-RUN conda run -n base-env conda install -y \
-    -c conda-forge \
-    gymnasium=0.28.1 \
-    stable-baselines3 \
-    "box2d-py>=2.3.5" \
-    pygame \
-    jupyterlab \
-    ipywidgets \
-    moviepy \
-    ffmpeg \
-    && \
-    conda run -n base-env pip install huggingface_sb3 sympy==1.13.1 && \
-    # Clean up to reduce final image size
+# Copy the environment.yml file into the image
+COPY environment.yml /tmp/environment.yml
+
+# Update the base-env environment using environment.yml
+RUN conda run -n base-env conda env update -n base-env -f /tmp/environment.yml && \
     conda clean -afy
 
 # Copy the rest of the project into the container

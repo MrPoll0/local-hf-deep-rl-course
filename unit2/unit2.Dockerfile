@@ -1,25 +1,18 @@
 FROM base-env
 
-# Create the environment for Unit 2
-RUN conda run -n base-env conda install -y \
-    -c conda-forge \
-    gymnasium \
-    pygame \
-    numpy \
-    imageio \
-    imageio-ffmpeg \
-    pyglet \
-    jupyterlab \
-    ipywidgets \
-    tqdm \
-    && \
-    conda run -n base-env pip install huggingface_hub pyyaml==6.0 && \
+# Copy the environment.yml file into the image
+COPY environment.yml /tmp/environment.yml
+
+# Update the base-env environment using environment.yml
+RUN conda run -n base-env conda env update -n base-env -f /tmp/environment.yml && \
     conda clean -afy
 
-# Step 3: Set up the working directory and copy files
+# Copy the rest of the project into the container
 WORKDIR /app
 COPY . .
 
-# Step 4: Expose port and define default command
+# Expose the JupyterLab port
 EXPOSE 8888
+
+# Start JupyterLab
 CMD ["conda", "run", "-n", "base-env", "jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
