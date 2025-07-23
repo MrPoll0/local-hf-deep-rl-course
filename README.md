@@ -1,5 +1,11 @@
 # Hugging Face Deep Reinforcement Learning Course — Local Containerized Edition
 
+<p align="center">
+  <a href="https://github.com/MrPoll0/local-hf-deep-rl-course/actions/workflows/docker-build.yml">
+    <img src="https://github.com/MrPoll0/local-hf-deep-rl-course/actions/workflows/docker-build.yml/badge.svg" alt="Build Docker Images">
+  </a>
+</p>
+
 This repository provides a **locally containerized environment** for running the [Hugging Face Deep Reinforcement Learning Course](https://huggingface.co/learn/deep-rl-course/unit0/introduction).
 
 > **Note:** The course notebooks included in this repository have been slightly modified to remove unnecessary installation commands (e.g. `pip install`), as all required dependencies are already provided by the Docker environment.
