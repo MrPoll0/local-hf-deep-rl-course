@@ -38,3 +38,27 @@ Once the container is running, open your browser and go to:
 [http://localhost:8888](http://localhost:8888)
 
 For more details and workflow for other units, see the [project root README](../README.md).
+
+---
+
+## Cleanup
+
+To free up disk space or remove old containers/images:
+
+- **Stop the running container:**
+  - Press `Ctrl+C` in the terminal where the container is running, or find the container ID with `docker ps` and stop it:
+    ```bash
+    docker stop <container_id>
+    ```
+- **Remove stopped containers:**
+    ```bash
+    docker container prune
+    ```
+- **Remove images (optional):**
+    ```bash
+    docker rmi unit1-env base-env
+    ```
+- **Remove dangling/unused images (optional):**
+    ```bash
+    docker image prune
+    ```
