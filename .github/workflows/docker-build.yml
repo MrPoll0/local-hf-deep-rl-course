@@ -1,0 +1,28 @@
+name: Build Docker Images
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build base Docker image
+        run: |
+          docker build -t base-env -f base.Dockerfile .
+
+      - name: Build unit1 Docker image
+        run: |
+          cd unit1
+          docker build -t unit1-env -f unit1.Dockerfile .
+
+      - name: Build unit2 Docker image
+        run: |
+          cd unit2
+          docker build -t unit2-env -f unit2.Dockerfile .
