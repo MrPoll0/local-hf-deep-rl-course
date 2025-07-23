@@ -13,6 +13,37 @@ Before you begin, make sure you have:
 - **Docker** installed ([Get Docker](https://docs.docker.com/get-docker/))
 - **NVIDIA Container Toolkit** installed ([Install guide](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html))
 
+## Modular Docker Workflow
+
+To optimize build times and disk usage, this project uses a modular Docker workflow with a shared base image:
+
+1. **Build the base image** (with CUDA, Conda, Python, and PyTorch):
+   - File: `base.Dockerfile`
+   - Build:
+     ```bash
+     docker build -t base-env -f base.Dockerfile .
+     ```
+   - This step is only needed once (unless you change the base dependencies).
+
+2. **Build the unit-specific image** (e.g., for Unit 1):
+   - File: `unit1.Dockerfile`
+   - Build:
+     ```bash
+     docker build -t unit1-env -f unit1.Dockerfile .
+     ```
+   - This image builds quickly, as it reuses the heavy base image.
+
+3. **Run the environment for a unit** (e.g., Unit 1):
+   ```bash
+   docker run --gpus all -p 8888:8888 -v ${PWD}:/app unit1-env
+   ```
+
+4. **Repeat for other units** (e.g., Unit 2) using their respective Dockerfiles and image tags.
+
+This approach ensures you only download and build the large dependencies once, and each unit's environment is isolated and fast to build.
+
+See below for CUDA compatibility and further details.
+
 ## CUDA Version & Compatibility
 
 > **Note:** The environments use **CUDA 12.1** (see `FROM nvidia/cuda:12.1.1-devel-ubuntu22.04`).
