@@ -1,5 +1,13 @@
 FROM base-env
 
+# Install system-level ffmpeg with H.264 support
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    libx264-dev \
+    libx265-dev \
+    libvpx-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy the environment.yml file into the image
 COPY environment.yml /tmp/environment.yml
 
