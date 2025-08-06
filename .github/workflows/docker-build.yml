@@ -55,6 +55,10 @@ jobs:
               echo "=== Disk space after $unit_dir build ==="
               df -h
               
+              # Remove the unit image to free up space (keep base-env)
+              echo "=== Removing ${unit_dir}-env image to free space ==="
+              docker rmi "${unit_dir}-env" || echo "Failed to remove ${unit_dir}-env image"
+              
               # Clean up Docker system after each build to free space
               echo "=== Cleaning up Docker system ==="
               docker system prune -f
