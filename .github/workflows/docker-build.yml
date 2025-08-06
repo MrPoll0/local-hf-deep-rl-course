@@ -13,15 +13,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Check disk space before build
+        run: |
+          echo "=== Disk space before build ==="
+          df -h
+          echo "=== Docker system info ==="
+          docker system df
+
       - name: Build base Docker image
         run: |
           docker build -t base-env -f base.Dockerfile .
+          echo "=== Disk space after base build ==="
+          df -h
 
       - name: Discover and build unit Docker images
         run: |
           # Find all unit directories (unit*, bonus-unit*)
           for unit_dir in unit* bonus-unit*; do
             if [ -d "$unit_dir" ]; then
+              echo "=== Processing $unit_dir ==="
+              echo "=== Disk space before $unit_dir build ==="
+              df -h
+              
               # Check if main Dockerfile exists
               if [ -f "$unit_dir/${unit_dir}.Dockerfile" ]; then
                 echo "Building main Docker image for $unit_dir"
@@ -35,6 +51,23 @@ jobs:
                 docker build -t "${unit_dir}-env" -f "${unit_dir}_scratch.Dockerfile" .
                 cd ..
               fi
+              
+              echo "=== Disk space after $unit_dir build ==="
+              df -h
+              
+              # Clean up Docker system after each build to free space
+              echo "=== Cleaning up Docker system ==="
+              docker system prune -f
+              docker builder prune -f
+              echo "=== Disk space after cleanup ==="
+              df -h
             fi
           done
+
+      - name: Final disk space check
+        run: |
+          echo "=== Final disk space ==="
+          df -h
+          echo "=== Final Docker system info ==="
+          docker system df
           
