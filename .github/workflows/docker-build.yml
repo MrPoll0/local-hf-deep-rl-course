@@ -17,12 +17,24 @@ jobs:
         run: |
           docker build -t base-env -f base.Dockerfile .
 
-      - name: Build unit1 Docker image
+      - name: Discover and build unit Docker images
         run: |
-          cd unit1
-          docker build -t unit1-env -f unit1.Dockerfile .
-
-      - name: Build unit2 Docker image
-        run: |
-          cd unit2
-          docker build -t unit2-env -f unit2.Dockerfile .
+          # Find all unit directories (unit*, bonus-unit*)
+          for unit_dir in unit* bonus-unit*; do
+            if [ -d "$unit_dir" ]; then
+              # Check if main Dockerfile exists
+              if [ -f "$unit_dir/${unit_dir}.Dockerfile" ]; then
+                echo "Building main Docker image for $unit_dir"
+                cd "$unit_dir"
+                docker build -t "${unit_dir}-env" -f "${unit_dir}.Dockerfile" .
+                cd ..
+              # If main Dockerfile doesn't exist, try scratch version
+              elif [ -f "$unit_dir/${unit_dir}_scratch.Dockerfile" ]; then
+                echo "Building scratch Docker image for $unit_dir (main not found)"
+                cd "$unit_dir"
+                docker build -t "${unit_dir}-env" -f "${unit_dir}_scratch.Dockerfile" .
+                cd ..
+              fi
+            fi
+          done
+          
