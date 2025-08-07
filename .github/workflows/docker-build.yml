@@ -31,8 +31,8 @@ jobs:
 
       - name: Discover and build unit Docker images
         run: |
-          # Find all unit directories (unit*, bonus-unit*)
-          for unit_dir in unit* bonus-unit*; do
+          # Find all unit directories (only unit*, exclude bonus-unit*)
+          for unit_dir in unit*; do
             if [ -d "$unit_dir" ]; then
               echo "=== Processing $unit_dir ==="
               echo "=== Disk space before $unit_dir build ==="
