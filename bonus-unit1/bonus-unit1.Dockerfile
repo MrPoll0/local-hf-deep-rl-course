@@ -7,9 +7,10 @@ RUN apt-get update && apt-get install -y git unzip wget && rm -rf /var/lib/apt/l
 # Copy the environment.yml file into the image
 COPY environment.yml /tmp/environment.yml
 
-# Update the base-env environment using environment.yml
-RUN conda run -n base-env conda env update -n base-env -f /tmp/environment.yml && \
-    conda clean -afy
+# Create a new environment based on environment.yml
+RUN conda env create -f /tmp/environment.yml && \
+    conda clean -afy && \
+    rm -rf /tmp/environment.yml
 
 # Copy the rest of the project into the container
 WORKDIR /app
@@ -19,8 +20,8 @@ COPY . .
 RUN git clone --depth 1 https://github.com/Unity-Technologies/ml-agents /opt/ml-agents
 
 # Install ML-Agents and ML-Agents-Env
-RUN conda run -n base-env pip install -e /opt/ml-agents/ml-agents-envs && \
-    conda run -n base-env pip install -e /opt/ml-agents/ml-agents
+RUN conda run -n mlagents-env pip install -e /opt/ml-agents/ml-agents-envs && \
+    conda run -n mlagents-env pip install -e /opt/ml-agents/ml-agents
 
 # Download and set up Huggy environment
 RUN mkdir -p /opt/ml-agents/trained-envs-executables/linux && \
@@ -32,4 +33,4 @@ RUN mkdir -p /opt/ml-agents/trained-envs-executables/linux && \
 EXPOSE 8888
 
 # Start JupyterLab
-CMD ["conda", "run", "-n", "base-env", "jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
+CMD ["conda", "run", "-n", "mlagents-env", "jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
